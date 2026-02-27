@@ -6,6 +6,7 @@ import { useAuthStore } from "../../../store/useAuthStore";
 import TypingIndicator from "../TypeIndicator";
 import MessageItem from "../MessageItem";
 import usePinnedMessage from "../../../store/usePinnedMessage";
+import { BACKEND_URL, SOCKET_OPTIONS } from "../../../config/network";
 
 const ChatRoom = () => {
   const { roomId } = useParams();
@@ -38,10 +39,7 @@ const ChatRoom = () => {
   }, [roomId]);
 
   useEffect(() => {
-    if (!socketRef.current)
-      socketRef.current = io(
-        import.meta.env.VITE_BACKEND_URL || "http://localhost:5000"
-      );
+    if (!socketRef.current) socketRef.current = io(BACKEND_URL, SOCKET_OPTIONS);
     const socket = socketRef.current;
 
     const handleChannelsList = (channels) => {

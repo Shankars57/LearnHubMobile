@@ -9,6 +9,7 @@ import usePinnedMessage from "../../store/usePinnedMessage";
 import { MessageCircle, Palette } from "lucide-react";
 import { useChatRoomTheme } from "../../store/useChatRoomTheme";
 import { themes } from "./themes";
+import { BACKEND_URL, SOCKET_OPTIONS } from "../../config/network";
 
 const ChatRoomDemo = () => {
   const { roomId } = useParams();
@@ -51,9 +52,7 @@ const ChatRoomDemo = () => {
 
   useEffect(() => {
     if (!socketRef.current) {
-      socketRef.current = io(
-        import.meta.env.VITE_BACKEND_URL || "http://localhost:5000"
-      );
+      socketRef.current = io(BACKEND_URL, SOCKET_OPTIONS);
     }
     const socket = socketRef.current;
 

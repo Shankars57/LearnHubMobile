@@ -9,7 +9,7 @@ import AIMentor from "../components/HomeComponents/AIMentor";
 import ScrollHome from "../components/HomeComponents/ScrollHome";
 const Home = () => {
   return (
-    <div className="relative">
+    <div className="relative overflow-hidden rounded-2xl md:rounded-3xl">
       <ScrollHome />
       <Hero />
       <Features />

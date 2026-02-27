@@ -4,14 +4,11 @@ import {
   BookOpen,
   Image,
   FileType,
-  Download,
-  Star,
   Map,
   ScrollText,
   FileUser,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import Snowfall from "react-snowfall";
 const materialTypes = [
   {
     icon: FileText,
@@ -20,6 +17,7 @@ const materialTypes = [
       "Comprehensive study materials and reference guides in PDF format",
     count: "500+",
     gradient: "from-red-500 to-orange-500",
+    path: "/materials",
   },
   {
     icon: BookOpen,
@@ -28,6 +26,7 @@ const materialTypes = [
       "Concise, well-organized notes for quick revision and learning",
     count: "1000+",
     gradient: "from-blue-500 to-cyan-500",
+    path: "/materials",
   },
   {
     icon: FileType,
@@ -35,6 +34,7 @@ const materialTypes = [
     description: "Editable documents for assignments and practice exercises",
     count: "300+",
     gradient: "from-purple-500 to-pink-500",
+    path: "/materials",
   },
   {
     icon: Image,
@@ -42,6 +42,7 @@ const materialTypes = [
     description: "Infographics and diagrams to visualize complex concepts",
     count: "800+",
     gradient: "from-green-500 to-emerald-500",
+    path: "/materials",
   },
   {
     icon: ScrollText,
@@ -50,6 +51,7 @@ const materialTypes = [
       "Quick reference sheets for syntax, algorithms, and important formulas",
     count: "200+",
     gradient: "from-yellow-500 to-amber-500",
+    path: "/cheatsheets",
   },
   {
     icon: Map,
@@ -58,6 +60,7 @@ const materialTypes = [
       "Step-by-step learning paths to guide your development journey",
     count: "50+",
     gradient: "from-indigo-500 to-blue-500",
+    path: "/roadmaps",
   },
   {
     icon: FileUser,
@@ -66,6 +69,7 @@ const materialTypes = [
       "Professional resume templates to help you stand out in job applications",
     count: "100+",
     gradient: "from-pink-500 to-rose-500",
+    path: "/resumes",
   },
 ];
 
@@ -74,7 +78,7 @@ export default function Materials() {
   return (
     <section
       id="materials"
-      className="relative py-24 bg-gradient-to-br from-blue-950 via-gray-900 to-purple-950 overflow-hidden"
+      className="home-section-materials relative overflow-hidden py-20 sm:py-24"
     >
       { /*<Snowfall />*/}
       <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
@@ -87,16 +91,16 @@ export default function Materials() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="mb-12 text-center sm:mb-16"
         >
-          <h2 className="text-4xl sm:text-5xl font-bold text-white mb-4">
+          <h2 className="mb-4 text-2xl font-bold text-white sm:text-5xl">
             Learn with
             <span className="bg-gradient-to-r from-blue-400 to-purple-400 text-transparent bg-clip-text">
               {" "}
               Rich Materials
             </span>
           </h2>
-          <p className="text-xl text-gray-400 max-w-2xl mx-auto">
+          <p className="mx-auto max-w-2xl text-sm text-gray-300 sm:text-xl">
             Access comprehensive study materials including PDFs, notes,
             documents, diagrams, cheat sheets, roadmaps, and more to strengthen
             your theoretical and practical knowledge.
@@ -104,7 +108,7 @@ export default function Materials() {
         </motion.div>
 
        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+        <div className="mb-12 grid grid-cols-1 gap-6 md:mb-16 md:grid-cols-2 lg:grid-cols-4">
           {materialTypes.map((material, index) => (
             <motion.div
               key={index}
@@ -113,7 +117,16 @@ export default function Materials() {
               transition={{ duration: 0.5, delay: index * 0.1 }}
               viewport={{ once: true }}
               whileHover={{ y: -10 }}
-              className="group relative"
+              onClick={() => navigate(material.path)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter" || event.key === " ") {
+                  event.preventDefault();
+                  navigate(material.path);
+                }
+              }}
+              role="button"
+              tabIndex={0}
+              className="group relative cursor-pointer"
             >
               <div className="relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl rounded-2xl p-6 border border-white/10 hover:border-white/20 transition-all h-full">
                 <div
@@ -122,10 +135,10 @@ export default function Materials() {
                   <material.icon className="w-6 h-6 text-white" />
                 </div>
 
-                <h3 className="text-xl font-bold text-white mb-2">
+                <h3 className="mb-2 text-lg font-bold text-white sm:text-xl">
                   {material.title}
                 </h3>
-                <p className="text-gray-400 text-sm mb-4">
+                <p className="mb-4 text-sm text-gray-300">
                   {material.description}
                 </p>
 
@@ -146,18 +159,18 @@ export default function Materials() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.6 }}
           viewport={{ once: true }}
-          className="bg-gradient-to-r from-blue-600/10 to-purple-600/10 backdrop-blur-xl border border-white/10 rounded-2xl p-8 text-center"
+          className="rounded-2xl border border-white/10 bg-gradient-to-r from-blue-600/10 to-purple-600/10 p-6 text-center backdrop-blur-xl sm:p-8"
         >
-          <h3 className="text-2xl font-bold text-white mb-3">
+          <h3 className="mb-3 text-xl font-bold text-white sm:text-2xl">
             Download Anytime, Learn Anywhere
           </h3>
-          <p className="text-gray-400 mb-6 max-w-2xl mx-auto">
+          <p className="mx-auto mb-6 max-w-2xl text-sm text-gray-300 sm:text-base">
             All study materials are available for offline access. Download once
             and study without internet connection.
           </p>
           <button
             onClick={() => navigate("/materials")}
-            className="px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-full hover:scale-105 transition-transform shadow-lg shadow-purple-500/30"
+            className="rounded-full bg-gradient-to-r from-blue-600 to-purple-600 px-7 py-3 text-sm font-semibold text-white shadow-lg shadow-purple-500/30 transition-transform hover:scale-105 sm:px-8 sm:py-4 sm:text-base"
           >
             Browse All Materials
           </button>

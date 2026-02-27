@@ -1,63 +1,65 @@
-import React from "react";
-import { BookOpen, Github, Twitter, Linkedin, Mail, Heart } from "lucide-react";
-import Snowfall from "react-snowfall";
+import { BookOpen, Github, Heart, Mail } from "lucide-react";
+import { Link } from "react-router-dom";
+
+const socialLinks = [
+  {
+    icon: Github,
+    href: "https://github.com/Shankars57",
+    label: "GitHub",
+  },
+  {
+    icon: Mail,
+    href: "mailto:bonamgshankar@gmail.com",
+    label: "Email",
+  },
+];
+
+const quickLinks = [
+  { label: "About Us", href: "/about" },
+  { label: "Playlists", href: "/playlist" },
+  { label: "Materials", href: "/materials" },
+];
+
+const supportLinks = [
+  { label: "Contact", href: "/contact" },
+  { label: "Chats", href: "/chats" },
+  { label: "AI Mentor", href: "/ai" },
+];
+
 const Footer = () => {
   const currentYear = new Date().getFullYear();
-  const socialLinks = [
-    { icon: Github, href: "https://github.com/Shankars57", label: "GitHub" },
-    { icon: Twitter, href: "#", label: "Twitter" },
-    { icon: Linkedin, href: "#", label: "LinkedIn" },
-    { icon: Mail, href: "mailto:bonamgshankar@gmail.com", label: "Email" },
-  ];
-
-  const quickLinks = [
-    { label: "About Us", href: "/about" },
-    { label: "Privacy Policy", href: "#" },
-    { label: "Terms of Service", href: "#" },
-    { label: "Contact", href: "/contact" },
-    { label: "Help Center", href: "#" },
-    { label: "Community Guidelines", href: "#" },
-  ];
-  const products = [
-    { label: "About Us", href: "/about" },
-    { label: "Privacy Policy", href: "#" },
-    { label: "Terms of Service", href: "#" },
-    { label: "Contact", href: "/contact" },
-    { label: "Help Center", href: "#" },
-    { label: "Community Guidelines", href: "#" },
-  ];
 
   return (
-    <footer className="bg-gray-900 border-t border-gray-800">
-      { /*<Snowfall />*/}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
-          <div className="col-span-1 lg:col-span-2">
-            <div className="flex items-center space-x-2 mb-4">
-              <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-                <BookOpen className="w-6 h-6 text-white" />
+    <footer className="home-footer">
+      <div className="mx-auto w-full max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+        <div className="mb-8 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
+          <div className="lg:col-span-2">
+            <div className="mb-4 flex items-center gap-2">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-r from-blue-500 to-purple-600">
+                <BookOpen className="h-6 w-6 text-white" />
               </div>
-              <span className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-blue-300 to-purple-300 bg-clip-text text-2xl font-bold text-transparent">
                 LearnHub
               </span>
             </div>
-            <p className="text-gray-300 mb-6 max-w-md leading-relaxed">
-              Empowering learners worldwide with collaborative education, AI
-              assistance, and comprehensive study resources. Join our community
-              and accelerate your learning journey.
+            <p className="mb-6 max-w-md text-sm leading-relaxed text-slate-300 sm:text-base">
+              LearnHub helps students learn faster with curated playlists,
+              structured materials, AI assistance, and collaborative chat rooms.
             </p>
 
-            <div className="flex space-x-4">
-              {socialLinks.map((social, index) => {
-                const Icon = social.icon;
+            <div className="flex gap-3">
+              {socialLinks.map((socialLink) => {
+                const Icon = socialLink.icon;
                 return (
                   <a
-                    key={index}
-                    href={social.href}
-                    aria-label={social.label}
-                    className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center text-gray-400 hover:text-white hover:bg-blue-500 transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-blue-500/25"
+                    key={socialLink.label}
+                    href={socialLink.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label={socialLink.label}
+                    className="flex h-10 w-10 items-center justify-center rounded-lg bg-white/10 text-slate-200 transition-all duration-200 hover:scale-105 hover:bg-blue-600 hover:text-white"
                   >
-                    <Icon className="w-5 h-5" />
+                    <Icon className="h-5 w-5" />
                   </a>
                 );
               })}
@@ -65,62 +67,50 @@ const Footer = () => {
           </div>
 
           <div>
-            <h3 className="text-lg font-semibold text-white mb-4">
-              Quick Links
-            </h3>
-            <ul className="space-y-3">
-              {quickLinks.slice(0, 3).map((link, index) => (
-                <li key={index}>
-                  <a
-                    href={link.href}
-                    className="text-gray-400 hover:text-blue-400 transition-colors duration-300 flex items-center group"
+            <h3 className="mb-4 text-lg font-semibold text-white">Quick Links</h3>
+            <ul className="space-y-2">
+              {quickLinks.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    to={link.href}
+                    className="text-sm text-slate-300 transition-colors hover:text-blue-300 sm:text-base"
                   >
-                    <span className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
           </div>
 
           <div>
-            <h3 className="text-lg font-semibold text-white mb-4">Support</h3>
-            <ul className="space-y-3">
-              {quickLinks.slice(3).map((link, index) => (
-                <li key={index}>
-                  <a
-                    href={link.href}
-                    className="text-gray-400 hover:text-purple-400 transition-colors duration-300 flex items-center group"
+            <h3 className="mb-4 text-lg font-semibold text-white">Support</h3>
+            <ul className="space-y-2">
+              {supportLinks.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    to={link.href}
+                    className="text-sm text-slate-300 transition-colors hover:text-purple-300 sm:text-base"
                   >
-                    <span className="w-1.5 h-1.5 bg-purple-500 rounded-full mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
+
+            <p className="mt-5 text-sm text-slate-200">
+              Need help?{" "}
+              <a className="text-blue-300 hover:text-blue-200" href="tel:9110560147">
+                +91 9110560147
+              </a>
+            </p>
           </div>
-          <p className="text-white">
-            Please Contact me if any issues will occurred.{" "}
-            <a
-            href="tel:9110560147"
-             className="text-blue-800">
-              +91 9110560147
-            </a>
-          </p>
         </div>
 
-        <div className="pt-8 border-t border-gray-800">
-          <div className="flex flex-col md:flex-row items-center justify-between">
-            <div className="text-gray-400 text-sm mb-4 md:mb-0">
-              © {currentYear} LearnHub. All rights reserved.
-            </div>
-
-            <div className="flex items-center text-gray-400 text-sm">
-              <span>Made with</span>
-              <Heart className="w-4 h-4 mx-1 text-red-500 animate-pulse" />
-              <span>for learners everywhere</span>
-            </div>
-          </div>
+        <div className="flex flex-col items-center justify-between gap-3 border-t border-white/10 pt-6 text-sm text-slate-300 md:flex-row">
+          <p>(c) {currentYear} LearnHub. All rights reserved.</p>
+          <p className="flex items-center gap-1">
+            Made with <Heart className="h-4 w-4 text-red-500" /> for learners
+          </p>
         </div>
       </div>
     </footer>

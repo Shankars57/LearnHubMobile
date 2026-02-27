@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { TypeAnimation } from "react-type-animation";
-import DashBoardData from "../DashBoardData";
+import { useNavigate } from "react-router-dom";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 40 },
@@ -21,6 +21,7 @@ const fadeInUp = {
 };
 
 const Hero = () => {
+  const navigate = useNavigate();
   const pills = [
     {
       icon: <Sparkles size={20} />,
@@ -47,7 +48,7 @@ const Hero = () => {
   return (
     <section
       id="hero"
-      className="relative w-full flex items-center justify-center py-24 bg-gradient-to-tr from-[#030712] via-[#06071b] to-black overflow-hidden"
+      className="home-section-hero relative flex w-full items-center justify-center overflow-hidden py-16 sm:py-24"
     >
       <motion.div
         animate={{ backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }}
@@ -56,12 +57,12 @@ const Hero = () => {
       />
       <div className="absolute bottom-0 right-0 w-[28rem] h-[28rem] bg-blue-900/20 blur-[160px] rounded-full"></div>
 
-      <div className="relative z-10 max-w-6xl mx-auto px-6 text-center flex flex-col items-center">
+      <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-col items-center px-4 text-center sm:px-6">
         <motion.h1
           variants={fadeInUp}
           initial="hidden"
           animate="visible"
-          className="text-3xl sm:text-5xl md:text-7xl font-extrabold leading-tight text-center"
+          className="text-center text-2xl font-extrabold leading-tight sm:text-5xl md:text-7xl"
         >
           <span className="bg-gradient-to-r from-blue-400 to-indigo-500 bg-clip-text text-transparent">
             <TypeAnimation
@@ -70,11 +71,11 @@ const Hero = () => {
                 1500,
                 "Grow Smarter",
                 1500,
-                "Achieve More",
+                "Build Faster",
                 1500,
-                "Inspire Others",
+                "Think Better",
                 1500,
-                "Start your journey!",
+                "Start Learning",
                 1500,
               ]}
               wrapper="span"
@@ -82,7 +83,8 @@ const Hero = () => {
               repeat={Infinity}
               style={{
                 display: "inline-block",
-                whiteSpace: "nowrap",
+                maxWidth: "100%",
+                whiteSpace: "normal",
               }}
             />
           </span>
@@ -94,7 +96,7 @@ const Hero = () => {
           initial="hidden"
           animate="visible"
           custom={2}
-          className="mt-6 text-base sm:text-lg md:text-2xl text-gray-400 max-w-3xl mx-auto leading-relaxed"
+          className="mx-auto mt-5 max-w-3xl text-sm leading-relaxed text-gray-300 sm:mt-6 sm:text-lg md:text-2xl"
         >
           Experience the next generation of collaborative learning. Watch
           curated playlists, chat with peers, explore AI-driven insights, and
@@ -107,7 +109,7 @@ const Hero = () => {
           initial="hidden"
           animate="visible"
           custom={3}
-          className="mt-10 flex flex-wrap gap-4 sm:gap-6 justify-center"
+          className="mt-8 flex flex-wrap justify-center gap-3 sm:mt-10 sm:gap-6"
         >
           {pills.map((pill, i) => (
             <motion.div
@@ -116,10 +118,10 @@ const Hero = () => {
                 scale: 1.1,
                 boxShadow: `0 0 25px rgba(100,150,255,0.3)`,
               }}
-              className={`flex items-center gap-2 px-5 py-2 sm:px-6 sm:py-3 rounded-full bg-gradient-to-r ${pill.gradient} text-white shadow-md border border-white/10 backdrop-blur-md transition-all duration-300`}
+              className={`flex items-center gap-2 rounded-full border border-white/10 bg-gradient-to-r px-4 py-2 text-white shadow-md backdrop-blur-md transition-all duration-300 sm:px-6 sm:py-3 ${pill.gradient}`}
             >
               {pill.icon}
-              <span className="font-medium text-sm sm:text-base">
+              <span className="text-xs font-medium sm:text-base">
                 {pill.text}
               </span>
             </motion.div>
@@ -132,27 +134,29 @@ const Hero = () => {
           initial="hidden"
           animate="visible"
           custom={4}
-          className="mt-12 flex flex-wrap items-center justify-center gap-4 sm:gap-6"
+          className="mt-10 flex w-full flex-col items-center justify-center gap-3 sm:mt-12 sm:w-auto sm:flex-row sm:gap-6"
         >
           <motion.button
+            onClick={() => navigate("/playlist")}
             whileHover={{
               scale: 1.05,
               boxShadow: "0 10px 35px rgba(0,0,255,0.4)",
             }}
             whileTap={{ scale: 0.95 }}
-            className="flex items-center justify-center px-6 sm:px-7 py-2.5 sm:py-3 rounded-full text-sm sm:text-base text-white gap-2 bg-gradient-to-r from-blue-600 to-indigo-700 shadow-lg shadow-indigo-900/40"
+            className="flex w-full max-w-xs items-center justify-center gap-2 rounded-full bg-gradient-to-r from-blue-600 to-indigo-700 px-6 py-2.5 text-sm text-white shadow-lg shadow-indigo-900/40 sm:w-auto sm:px-7 sm:py-3 sm:text-base"
           >
-            <a href="#playlists">Start Learning</a>
+            Start Learning
             <MoveRight size={18} />
           </motion.button>
 
           <motion.button
+            onClick={() => navigate("/playlist")}
             whileHover={{
               scale: 1.05,
               boxShadow: "0 10px 30px rgba(255,255,255,0.15)",
             }}
             whileTap={{ scale: 0.95 }}
-            className="flex items-center justify-center px-6 sm:px-7 py-2.5 sm:py-3 rounded-full text-sm sm:text-base text-white gap-2 border border-white/20 bg-white/5 backdrop-blur-sm hover:bg-white/10 transition-all"
+            className="flex w-full max-w-xs items-center justify-center gap-2 rounded-full border border-white/20 bg-white/5 px-6 py-2.5 text-sm text-white backdrop-blur-sm transition-all hover:bg-white/10 sm:w-auto sm:px-7 sm:py-3 sm:text-base"
           >
             Watch Demo
             <Play size={18} />
@@ -161,7 +165,7 @@ const Hero = () => {
 
         {/* Animated Down Arrow */}
         <motion.div
-          className="mt-10 text-white flex"
+          className="mt-8 flex text-white sm:mt-10"
           animate={{ y: [0, 10, 0] }}
           transition={{ repeat: Infinity, duration: 1.5 }}
         >

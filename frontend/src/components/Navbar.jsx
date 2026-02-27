@@ -1,307 +1,317 @@
-import React, { useState, useEffect, useContext } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import {
   Book,
-  User,
-  Menu,
-  X,
-  MessageSquare,
   BookOpen,
+  Home,
+  Menu,
+  MessageSquare,
+  Palette,
   Play,
   Sparkles,
-  Home,
+  User,
+  X,
 } from "lucide-react";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { LearnContext } from "../../context/LearnContextProvider";
+import { useThemeStore } from "../../store/useThemeStore";
 
-const variants = {
-  initial: { y: -20, opacity: 0 },
-  animate: {
-    y: 0,
-    opacity: 1,
-    transition: { type: "spring", duration: 0.2, staggerChildren: 0.1 },
+const navItems = [
+  { label: "Home", path: "/", icon: Home },
+  { label: "Playlist", path: "/playlist", icon: Play },
+  {
+    label: "Materials",
+    path: "/materials",
+    icon: BookOpen,
+    dropdown: [
+      { label: "All Materials", path: "/materials" },
+      { label: "Cheatsheets", path: "/cheatsheets" },
+      { label: "Roadmaps", path: "/roadmaps" },
+      { label: "Resume Templates", path: "/resumes" },
+    ],
   },
-};
+  { label: "Chats", path: "/chats", icon: MessageSquare },
+  { label: "AI", path: "/ai", icon: Sparkles },
+];
 
-const childVariants = {
-  initial: { y: -10, opacity: 0 },
-  animate: { y: 0, opacity: 1, transition: { type: "spring" } },
-};
-
-const variants2 = {
-  initial: { x: -20, opacity: 0 },
-  animate: {
-    x: 0,
-    opacity: 1,
-    transition: { type: "spring", duration: 0.2, staggerChildren: 0.1 },
-  },
-};
-
-const childVariants2 = {
-  initial: { x: -100, opacity: 0 },
-  animate: { x: 0, opacity: 1, transition: { type: "spring", duration: 0.5 } },
+const isRouteActive = (pathname, routePath) => {
+  if (routePath === "/") return pathname === "/";
+  return pathname === routePath || pathname.startsWith(`${routePath}/`);
 };
 
 const Navbar = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const [active, setActive] = useState(location.pathname);
   const { setToken } = useContext(LearnContext);
+  const { theme, themes, setTheme, cycleTheme } = useThemeStore();
+
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMaterialsOpen, setIsMaterialsOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
 
-  const handleLogout = () => {
-    if (localStorage.getItem("token")) {
-      setToken("");
-      localStorage.removeItem("token");
-      navigate("/");
-    }
-  };
-
-  const navItems = [
-    { label: "Home", path: "/", icon: <Home size={18} /> },
-    { label: "Playlist", path: "/playlist", icon: <Play size={18} /> },
-    {
-      label: "Materials",
-      path: "/materials",
-      icon: <BookOpen size={18} />,
-      dropdown: [
-        { label: "Materials", path: "/materials" },
-        { label: "Cheatsheets", path: "/cheatsheets" },
-        { label: "Roadmaps", path: "/roadmaps" },
-        { label: "Resume Templates", path: "/resumes" },
-      ],
-    },
-    { label: "Chats", path: "/chats", icon: <MessageSquare size={18} /> },
-    { label: "AI", path: "/ai", icon: <Sparkles size={18} /> },
-  ];
-
-  useEffect(() => setActive(location.pathname), [location.pathname]);
+  const isMaterialsRoute = useMemo(
+    () =>
+      ["/materials", "/cheatsheets", "/roadmaps", "/resumes"].some((path) =>
+        isRouteActive(location.pathname, path),
+      ),
+    [location.pathname],
+  );
 
   useEffect(() => {
-    const onScroll = () => setIsScrolled(window.scrollY > 20);
+    const onScroll = () => setIsScrolled(window.scrollY > 8);
+    onScroll();
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  useEffect(() => {
+    setIsMenuOpen(false);
+    setIsProfileOpen(false);
+    setIsMaterialsOpen(false);
+  }, [location.pathname]);
+
+  const handleLogout = () => {
+    if (!localStorage.getItem("token")) return;
+    setToken("");
+    localStorage.removeItem("token");
+    navigate("/");
+  };
+
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 w-full transition-all duration-300 ${
-        isScrolled
-          ? "bg-gray-600/40 backdrop-blur-sm shadow-md"
-          : "bg-transparent"
-      }`}
+      className={`app-topbar fixed inset-x-0 top-0 z-50 transition-shadow duration-200 ${isScrolled ? "shadow-lg shadow-black/25" : ""}`}
     >
-      <div className="max-w-7xl mx-auto px-6">
-        <nav className="py-4 flex items-center justify-between">
-          <motion.div
-            initial={{ x: -200, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ type: "spring" }}
-          >
-            <Link to="/" className="flex items-center gap-2">
-              <Book className="text-white" size={28} />
-              <span className="font-bold text-xl text-white">LearnHub</span>
-            </Link>
-          </motion.div>
+      <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-4 py-3 sm:px-6">
+        <Link to="/" className="flex items-center gap-2">
+          <div className="app-surface flex h-10 w-10 items-center justify-center rounded-xl">
+            <Book className="text-white" size={22} />
+          </div>
+          <div className="leading-tight">
+            <p className="text-base font-bold text-white sm:text-lg">LearnHub</p>
+            <p className="text-[11px] text-slate-300">Mobile Learning</p>
+          </div>
+        </Link>
 
-          <motion.div
-            variants={variants}
-            initial="initial"
-            animate="animate"
-            className="hidden md:flex items-center space-x-8"
-          >
-            {navItems.map((item) => (
-              <motion.div
-                key={item.path}
-                variants={childVariants}
-                className="relative"
-              >
-                {item.dropdown ? (
-                  <div
-                    className="relative"
-                    onMouseEnter={() => setIsMaterialsOpen(true)}
-                    onMouseLeave={() => setIsMaterialsOpen(false)}
+        <div className="hidden items-center gap-2 md:flex">
+          {navItems.map((item) => {
+            const Icon = item.icon;
+            const active = item.dropdown
+              ? isMaterialsRoute
+              : isRouteActive(location.pathname, item.path);
+
+            if (item.dropdown) {
+              return (
+                <div
+                  key={item.path}
+                  className="relative"
+                  onMouseEnter={() => setIsMaterialsOpen(true)}
+                  onMouseLeave={() => setIsMaterialsOpen(false)}
+                >
+                  <button
+                    className={`flex items-center gap-2 rounded-xl px-3 py-2 text-sm transition-colors ${active ? "bg-blue-600 text-white" : "text-slate-200 hover:bg-white/10"}`}
                   >
-                    <div
-                      className={`flex items-center gap-2 px-2 py-1 text-sm font-medium cursor-pointer transition-colors duration-200 ${
-                        active === item.path
-                          ? isScrolled
-                            ? "text-white bg-blue-800 rounded"
-                            : "text-blue-600 font-semibold"
-                          : isScrolled
-                          ? "text-white hover:text-gray-200"
-                          : "text-gray-200 hover:text-blue-400"
-                      }`}
-                    >
-                      {item.icon}
-                      {item.label}
-                    </div>
+                    <Icon size={16} />
+                    {item.label}
+                  </button>
+                  <AnimatePresence>
                     {isMaterialsOpen && (
                       <motion.div
-                        initial={{ opacity: 0, y: -5 }}
+                        initial={{ opacity: 0, y: -8 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="absolute top-4 left-0 mt-2 w-48 bg-white/10 backdrop-blur-md border border-white/20 rounded-lg shadow-lg flex flex-col z-50"
+                        exit={{ opacity: 0, y: -8 }}
+                        className="app-surface absolute left-0 mt-2 flex w-52 flex-col rounded-xl p-2"
                       >
-                        {item.dropdown.map((drop) => (
+                        {item.dropdown.map((dropItem) => (
                           <Link
-                            key={drop.path}
-                            to={drop.path}
-                            onClick={() => setActive(drop.path)}
-                            className="px-4 py-2 text-sm text-white hover:bg-white/20 transition-colors duration-200"
+                            key={dropItem.path}
+                            to={dropItem.path}
+                            className="rounded-lg px-3 py-2 text-sm text-slate-100 transition-colors hover:bg-white/10"
                           >
-                            {drop.label}
+                            {dropItem.label}
                           </Link>
                         ))}
                       </motion.div>
                     )}
-                  </div>
-                ) : (
-                  <Link
-                    to={item.path}
-                    onClick={() => setActive(item.path)}
-                    className={`flex items-center gap-2 px-2 py-1 text-sm font-medium transition-colors duration-200 ${
-                      active === item.path
-                        ? isScrolled
-                          ? "text-white bg-blue-800 rounded"
-                          : "text-blue-600 font-semibold"
-                        : isScrolled
-                        ? "text-white hover:text-gray-200"
-                        : "text-gray-200 hover:text-blue-400"
-                    }`}
-                  >
-                    {item.icon}
-                    {item.label}
-                  </Link>
-                )}
-              </motion.div>
-            ))}
+                  </AnimatePresence>
+                </div>
+              );
+            }
 
-            <div className="relative group ">
-              <div className="w-8 h-8 flex items-center justify-center rounded-full cursor-pointer transition-colors duration-200 text-white border border-white/40">
-                <User className="w-5 h-5" />
-              </div>
-              <motion.div className="absolute -right-20 w-40 flex-col rounded-xl bg-white/10 backdrop-blur-md border border-white/20 shadow-lg p-2 opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 group-hover:flex hidden z-50 transition-all duration-300 ">
-                <Link
-                  to="/profile"
-                  className="px-4 py-2 text-sm font-medium text-white text-center rounded-md hover:bg-white/20 transition-colors duration-200"
-                >
-                  Profile
-                </Link>
-                <button
-                  onClick={handleLogout}
-                  className="px-4 py-2 text-sm font-medium text-white rounded-md hover:bg-red-500/70 transition-colors duration-200"
-                >
-                  Logout
-                </button>
-              </motion.div>
-            </div>
-          </motion.div>
+            return (
+              <Link
+                key={item.path}
+                to={item.path}
+                className={`flex items-center gap-2 rounded-xl px-3 py-2 text-sm transition-colors ${active ? "bg-blue-600 text-white" : "text-slate-200 hover:bg-white/10"}`}
+              >
+                <Icon size={16} />
+                {item.label}
+              </Link>
+            );
+          })}
 
-          <div className="md:hidden">
-            <button onClick={() => setIsMenuOpen(!isMenuOpen)}>
-              {isMenuOpen ? (
-                <X className="text-white cursor-pointer" size={26} />
-              ) : (
-                <Menu className="text-white cursor-pointer" size={26} />
-              )}
-            </button>
+          <div className="app-surface flex items-center gap-2 rounded-xl px-2 py-1.5">
+            <Palette size={15} className="text-sky-300" />
+            <select
+              value={theme}
+              onChange={(event) => setTheme(event.target.value)}
+              className="theme-select rounded-md px-2 py-1 text-xs focus:outline-none"
+              aria-label="Theme"
+            >
+              {themes.map((themeOption) => (
+                <option key={themeOption.id} value={themeOption.id}>
+                  {themeOption.label}
+                </option>
+              ))}
+            </select>
           </div>
-        </nav>
 
+          <div className="relative">
+            <button
+              onClick={() => setIsProfileOpen((prev) => !prev)}
+              className="app-surface flex h-10 w-10 items-center justify-center rounded-xl text-white transition hover:bg-white/10"
+            >
+              <User size={18} />
+            </button>
+            <AnimatePresence>
+              {isProfileOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: -8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  className="app-surface absolute right-0 mt-2 flex w-36 flex-col rounded-xl p-2"
+                >
+                  <Link
+                    to="/profile"
+                    className="rounded-lg px-3 py-2 text-sm text-slate-100 transition-colors hover:bg-white/10"
+                  >
+                    Profile
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="rounded-lg px-3 py-2 text-left text-sm text-slate-100 transition-colors hover:bg-red-500/60"
+                  >
+                    Logout
+                  </button>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2 md:hidden">
+          <button
+            onClick={cycleTheme}
+            className="app-surface flex h-10 w-10 items-center justify-center rounded-xl text-white"
+            aria-label="Cycle Theme"
+          >
+            <Palette size={18} />
+          </button>
+          <button
+            onClick={() => setIsMenuOpen((prev) => !prev)}
+            className="app-surface flex h-10 w-10 items-center justify-center rounded-xl text-white"
+            aria-label="Toggle Menu"
+          >
+            {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
+        </div>
+      </div>
+
+      <AnimatePresence>
         {isMenuOpen && (
           <motion.div
-            variants={variants2}
-            initial="initial"
-            animate="animate"
-            className="md:hidden 
-             pb-4 flex flex-col 
-               
-            space-y-3 bg-black/70
-             backdrop-blur-xl"
+            initial={{ opacity: 0, y: -12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -12 }}
+            className="app-surface mx-4 mb-3 rounded-2xl p-3 md:hidden"
           >
-            {navItems.map((item) => (
-              <motion.div key={item.path} variants={childVariants2}>
-                {item.dropdown ? (
-                  <div className="flex flex-col   ">
-                    <div
-                      onClick={() => setIsMaterialsOpen(!isMaterialsOpen)}
-                      className={`flex items-center justify-between px-3 py-2 rounded text-sm font-medium cursor-pointer transition-colors duration-200 
-                        
-                        hover:bg-blue-800 hover:text-white
-                      
-                      ${
-                        active === item.path
-                          ? isScrolled
-                            ? "text-white bg-blue-800 rounded"
-                            : "text-blue-600 font-semibold"
-                          : "text-gray-400 hover:text-blue-600"
-                      }`}
-                    >
-                      <div className="flex items-center gap-2 ">
-                        {item.icon}
-                        {item.label}
-                      </div>
-                      <span>{isMaterialsOpen ? "▲" : "▼"}</span>
+            <div className="space-y-1">
+              {navItems.map((item) => {
+                const Icon = item.icon;
+                const active = item.dropdown
+                  ? isMaterialsRoute
+                  : isRouteActive(location.pathname, item.path);
+
+                if (item.dropdown) {
+                  return (
+                    <div key={item.path} className="rounded-xl border border-white/10">
+                      <button
+                        onClick={() => setIsMaterialsOpen((prev) => !prev)}
+                        className={`flex w-full items-center justify-between rounded-xl px-3 py-2 text-sm ${active ? "bg-blue-600 text-white" : "text-slate-200"}`}
+                      >
+                        <span className="flex items-center gap-2">
+                          <Icon size={16} />
+                          {item.label}
+                        </span>
+                        <span>{isMaterialsOpen ? "-" : "+"}</span>
+                      </button>
+                      {isMaterialsOpen && (
+                        <div className="space-y-1 px-3 pb-3">
+                          {item.dropdown.map((dropItem) => (
+                            <Link
+                              key={dropItem.path}
+                              to={dropItem.path}
+                              className="block rounded-lg px-3 py-2 text-sm text-slate-200 transition-colors hover:bg-white/10"
+                            >
+                              {dropItem.label}
+                            </Link>
+                          ))}
+                        </div>
+                      )}
                     </div>
-                    {isMaterialsOpen && (
-                      <div className="flex flex-col ml-4 mt-1">
-                        {item.dropdown.map((drop) => (
-                          <Link
-                            key={drop.path}
-                            to={drop.path}
-                            onClick={() => {
-                              setActive(drop.path);
-                              setIsMenuOpen(false);
-                            }}
-                            className="px-3 py-1 text-sm text-gray-200 hover:text-white hover:bg-blue-600 rounded transition-colors duration-200"
-                          >
-                            {drop.label}
-                          </Link>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                ) : (
+                  );
+                }
+
+                return (
                   <Link
+                    key={item.path}
                     to={item.path}
-                    onClick={() => {
-                      setActive(item.path);
-                      setIsMenuOpen(false);
-                    }}
-                    className={`flex items-center gap-2 px-3 py-2 rounded text-sm font-medium transition-colors
-                     duration-200
-                     hover:bg-blue-800 hover:text-white
-                      ${
-                        active === item.path
-                          ? isScrolled
-                            ? "text-white bg-blue-800 rounded"
-                            : "text-blue-600 font-semibold"
-                          : "text-gray-400 hover:text-blue-600"
-                      }`}
+                    className={`flex items-center gap-2 rounded-xl px-3 py-2 text-sm ${active ? "bg-blue-600 text-white" : "text-slate-200 hover:bg-white/10"}`}
                   >
-                    {item.icon}
+                    <Icon size={16} />
                     {item.label}
                   </Link>
-                )}
-              </motion.div>
-            ))}
-            <Link
-              to="/profile"
-              onClick={() => {
-                setActive("/profile");
-                setIsMenuOpen(false);
-              }}
-              className="px-3 flex gap-2 items-center py-1 text-sm text-gray-200 hover:text-white hover:bg-blue-600 rounded transition-colors duration-200"
-            >
-              <User size={18} /> Profile
-            </Link>
+                );
+              })}
+            </div>
+
+            <div className="mt-3 rounded-xl border border-white/10 p-3">
+              <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-300">
+                Theme
+              </p>
+              <div className="grid grid-cols-3 gap-2">
+                {themes.map((themeOption) => (
+                  <button
+                    key={themeOption.id}
+                    onClick={() => setTheme(themeOption.id)}
+                    className={`rounded-lg px-2 py-2 text-xs font-medium ${theme === themeOption.id ? "bg-blue-600 text-white" : "bg-white/10 text-slate-200"}`}
+                  >
+                    {themeOption.chip}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="mt-3 grid grid-cols-2 gap-2">
+              <Link
+                to="/profile"
+                className="rounded-xl bg-white/10 px-3 py-2 text-center text-sm text-slate-100"
+              >
+                Profile
+              </Link>
+              <button
+                onClick={handleLogout}
+                className="rounded-xl bg-red-500/70 px-3 py-2 text-sm text-white"
+              >
+                Logout
+              </button>
+            </div>
           </motion.div>
         )}
-      </div>
+      </AnimatePresence>
     </header>
   );
 };
 
 export default Navbar;
+

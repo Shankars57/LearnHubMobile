@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 import { Users, MessageSquare, Zap, Heart } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import Snowfall from "react-snowfall";
 const chatRooms = [
   {
     name: "JavaScript Ninjas",
@@ -32,7 +31,10 @@ const chatRooms = [
 export default function Community() {
   const navigate = useNavigate();
   return (
-    <section id="community" className="relative py-24 bg-gradient-to-br from-[#02010a] via-[#050019] to-[#0b001f] overflow-hidden">
+    <section
+      id="community"
+      className="home-section-community relative overflow-hidden py-20 sm:py-24"
+    >
         { /*<Snowfall />*/}
       <div className="absolute inset-0">
         <div className="absolute top-1/4 left-0 w-80 h-80 bg-blue-800 rounded-full filter blur-[120px] opacity-25"></div>
@@ -40,7 +42,7 @@ export default function Community() {
       </div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16">
          
           <motion.div
             initial={{ opacity: 0, x: -50 }}
@@ -48,14 +50,14 @@ export default function Community() {
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-4xl sm:text-5xl font-bold text-white mb-6">
+            <h2 className="mb-5 text-2xl font-bold text-white sm:text-5xl sm:mb-6">
               Learn Together,
               <br />
               <span className="bg-gradient-to-r from-blue-400 to-purple-400 text-transparent bg-clip-text">
                 Grow Faster
               </span>
             </h2>
-            <p className="text-xl text-gray-300 mb-8">
+            <p className="mb-8 text-sm text-gray-300 sm:text-xl">
               Join thousands of learners in collaborative study rooms. Share
               knowledge, solve problems together, and build lasting connections
               with fellow developers.
@@ -95,7 +97,10 @@ export default function Community() {
               ))}
             </div>
 
-            <button onClick={()=>navigate("/chats")} className="px-8 py-4 bg-gradient-to-r from-blue-700 to-purple-700 text-white font-semibold rounded-full hover:scale-105 transition-transform shadow-lg shadow-purple-700/40">
+            <button
+              onClick={() => navigate("/chats")}
+              className="rounded-full bg-gradient-to-r from-blue-700 to-purple-700 px-7 py-3 text-sm font-semibold text-white shadow-lg shadow-purple-700/40 transition-transform hover:scale-105 sm:px-8 sm:py-4 sm:text-base"
+            >
               Join the Community
             </button>
           </motion.div>
@@ -116,7 +121,16 @@ export default function Community() {
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 viewport={{ once: true }}
                 whileHover={{ scale: 1.02 }}
-                className="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-xl p-6 hover:border-white/20 hover:bg-white/10 transition-all cursor-pointer"
+                onClick={() => navigate("/chats")}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    navigate("/chats");
+                  }
+                }}
+                role="button"
+                tabIndex={0}
+                className="cursor-pointer rounded-xl border border-white/10 bg-white/5 p-6 backdrop-blur-2xl transition-all hover:border-white/20 hover:bg-white/10"
               >
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-3">

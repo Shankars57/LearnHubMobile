@@ -11,6 +11,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { NavLink } from "react-router-dom";
 import { io } from "socket.io-client";
 import toast from "react-hot-toast";
+import { BACKEND_URL, SOCKET_OPTIONS } from "../../config/network";
 
 const Sidebar = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -34,7 +35,7 @@ const Sidebar = () => {
 
   // --- Socket.IO connection ---
   useEffect(() => {
-    const s = io(import.meta.env.VITE_BACKEND_URL || "http://localhost:5000");
+    const s = io(BACKEND_URL, SOCKET_OPTIONS);
     setSocket(s);
 
     s.on("channels_list", (list) => setChannels(list));

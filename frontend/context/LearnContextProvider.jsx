@@ -4,9 +4,10 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { useAuthStore } from "../store/useAuthStore";
+import { BACKEND_URL } from "../config/network";
 export const LearnContext = createContext();
 
-axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL;
+axios.defaults.baseURL = BACKEND_URL;
 
 const LearnContextProvider = ({ children }) => {
   const navigate = useNavigate();
@@ -89,7 +90,7 @@ const LearnContextProvider = ({ children }) => {
           navigate("/");
         }
         return Promise.reject(err);
-      }
+      },
     );
     return () => axios.interceptors.response.eject(interceptor);
   }, []);

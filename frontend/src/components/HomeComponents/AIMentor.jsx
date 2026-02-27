@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 import { Bot, Code, Lightbulb, CheckCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import Snowfall from "react-snowfall";
 const features = [
   { icon: Code, text: "Explain code line-by-line" },
   { icon: Lightbulb, text: "Generate practice problems" },
@@ -12,13 +11,16 @@ const features = [
 export default function AIMentor() {
   const navigate = useNavigate();
   return (
-    <section id="ai" className="relative py-24 bg-gradient-to-br from-gray-950 via-blue-950 to-purple-950 overflow-hidden">
+    <section
+      id="ai"
+      className="home-section-ai relative overflow-hidden py-20 sm:py-24"
+    >
       { /*<Snowfall />*/}
 
       <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16">
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -29,7 +31,7 @@ export default function AIMentor() {
             <div className="relative">
               <div className="absolute -inset-4 bg-gradient-to-r from-blue-600 to-purple-600 rounded-3xl blur-2xl opacity-20"></div>
 
-              <div className="relative bg-gradient-to-br from-gray-900/90 to-gray-800/90 backdrop-blur-xl rounded-2xl border border-white/10 p-8">
+              <div className="relative rounded-2xl border border-white/10 bg-gradient-to-br from-gray-900/90 to-gray-800/90 p-5 backdrop-blur-xl sm:p-8">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center">
                     <Bot className="w-6 h-6 text-white" />
@@ -63,7 +65,7 @@ export default function AIMentor() {
                     whileInView={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.4 }}
                     viewport={{ once: true }}
-                    className="bg-purple-600/20 rounded-lg p-4 border border-purple-500/30 ml-8"
+                    className="ml-4 rounded-lg border border-purple-500/30 bg-purple-600/20 p-4 sm:ml-8"
                   >
                     <div className="flex items-start gap-2 mb-2">
                       <Bot className="w-4 h-4 text-purple-400 mt-1" />
@@ -102,7 +104,7 @@ export default function AIMentor() {
                     whileInView={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.8 }}
                     viewport={{ once: true }}
-                    className="bg-purple-600/20 rounded-lg p-4 border border-purple-500/30 ml-8"
+                    className="ml-4 rounded-lg border border-purple-500/30 bg-purple-600/20 p-4 sm:ml-8"
                   >
                     <div className="flex items-start gap-2">
                       <Bot className="w-4 h-4 text-purple-400 mt-1" />
@@ -139,20 +141,20 @@ export default function AIMentor() {
             viewport={{ once: true }}
             className="order-1 lg:order-2"
           >
-            <h2 className="text-4xl sm:text-5xl font-bold text-white mb-6">
+            <h2 className="mb-5 text-2xl font-bold text-white sm:text-5xl sm:mb-6">
               Your Personal
               <br />
               <span className="bg-gradient-to-r from-blue-400 to-purple-400 text-transparent bg-clip-text">
                 AI Coding Mentor
               </span>
             </h2>
-            <p className="text-xl text-gray-300 mb-8">
+            <p className="mb-8 text-sm text-gray-300 sm:text-xl">
               Get instant, personalized help whenever you're stuck. Our AI
               mentor understands your learning style and adapts explanations to
               match your level.
             </p>
 
-            <div className="grid grid-cols-2 gap-4 mb-8">
+            <div className="mb-8 grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
               {features.map((feature, index) => (
                 <motion.div
                   key={index}
@@ -195,7 +197,7 @@ export default function AIMentor() {
 
             <button
               onClick={() => navigate("/ai")}
-              className="mt-8 px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-full hover:scale-105 transition-transform shadow-lg shadow-purple-500/30"
+              className="mt-8 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 px-7 py-3 text-sm font-semibold text-white shadow-lg shadow-purple-500/30 transition-transform hover:scale-105 sm:px-8 sm:py-4 sm:text-base"
             >
               Try AI Mentor Free
             </button>

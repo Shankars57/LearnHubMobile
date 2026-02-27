@@ -44,8 +44,7 @@ const PersistentPlayer = () => {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 100, opacity: 0 }}
           transition={{ duration: 0.3 }}
-          className="fixed bottom-4 right-4 bg-gray-900 border border-gray-700 shadow-xl
-           rounded-xl overflow-hidden sm:w-[350px] md:w-[400px] h-[225px] z-50 cursor-grab active:cursor-grabbing"
+          className="fixed bottom-24 right-3 z-50 h-[225px] cursor-grab overflow-hidden rounded-xl border border-gray-700 bg-gray-900 shadow-xl active:cursor-grabbing sm:right-4 sm:w-[350px] md:bottom-4 md:w-[400px]"
         >
           <div className="relative flex justify-between items-center bg-gray-800 px-2 py-1 text-xs text-gray-300 select-none">
             <p className="truncate prose">{currentVideo.snippet?.title}</p>
